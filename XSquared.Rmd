@@ -1,0 +1,40 @@
+---
+title: "Linear Fit For X Squared"
+author: "Clark Gaylord"
+date: "11/18/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Linear regression can be used regardless of whether the data are in fact linear. Sometimes the assumption of linearity results in particularly poor results, especially if there is a need for extrapolation. However, the linear model is also a "first order approximation" and sometimes the simplicity of the model itself brings its own virtues.
+
+Let's consider how well (or how poorly) a linear model might work for a scenario in which we *know* that our data are not linear. Consider the situation where we have y = x^2, say for x between 1 and 10. Although clearly x^2 is not linear, it is still the case that low values of x imply low values of y, and high values of x imply high values of y. So let's see how well this works.
+
+```{r}
+xy <- data.frame(x = seq(1,10))
+xy$y <- xy$x^2
+plot(y~x, data=xy, main="Y = X^2")
+```
+
+We wish to introduce the "linear model" command in R: lm().
+
+```{r}
+xy.lm <- lm(y~x, data=xy)
+xy.lm
+summary(xy.lm)
+```
+
+Note that the R-squared value is 95%, which is generally considered to be quite high.
+
+```{r}
+plot(y~x, data=xy,
+     ylim = c(-25,105),
+     main = "Fitting a line to Y=X^2")
+abline(xy.lm)
+text(x=8,y=50,pos=4,label="y = 11 x - 22")
+```
+
+We see that while there is clearly a systematic misrepresentation of the model to the data, the line does somewhat approximate the data.
